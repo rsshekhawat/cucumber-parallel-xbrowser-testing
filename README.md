@@ -1,17 +1,20 @@
 # Plugin : cucumber-parallel-xbrowser-testing
 
-## Include below mentioned dependencies and plugins in the pom.xml
+### Include below mentioned dependencies and plugins in the pom.xml
 
-## Dependency : cucumber-parallel-xbrowser-testing
+##### Dependency : cucumber-parallel-xbrowser-testing
 
+```
 <dependency>
     <groupId>io.github.rsshekhawat</groupId>
     <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
     <version>0.0.1</version>
 </dependency>
+```
 
-## Plugin : cucumber-parallel-xbrowser-testing
+##### Plugin : cucumber-parallel-xbrowser-testing
 
+```
 <plugin>
     <groupId>io.github.rsshekhawat</groupId>
     <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
@@ -32,9 +35,11 @@
       </execution>
     </executions>
 </plugin>
+```
 
-## Plugin : build-helper-maven-plugin
+##### Plugin : build-helper-maven-plugin
 
+```
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>build-helper-maven-plugin</artifactId>
@@ -54,9 +59,11 @@
       </execution>
     </executions>
 </plugin>
+```
 
-## Plugin : maven-failsafe-plugin
+##### Plugin : maven-failsafe-plugin
 
+```
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-failsafe-plugin</artifactId>
@@ -74,3 +81,4 @@
       </execution>
     </executions>
 </plugin>
+```
