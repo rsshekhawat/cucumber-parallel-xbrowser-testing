@@ -4,7 +4,7 @@
 
 <plugin>
   <name>cucumber-parallel-xbrowser-testing</name>
-  <description></description>
+  <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
   <version>0.0.1</version>
