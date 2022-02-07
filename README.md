@@ -1,6 +1,8 @@
 # Plugin : cucumber-parallel-xbrowser-testing
 
-### Include below mentioned dependencies and plugins in the pom.xml
+## Steps to execute this plugin : 
+
+### STEP 1 : Include below mentioned dependencies and plugins in the pom.xml
 
 ##### Dependency : cucumber-parallel-xbrowser-testing
 
@@ -82,3 +84,31 @@
     </executions>
 </plugin>
 ```
+
+### STEP 2 : Create config.xml file to provide the details of different configurations (OS/Browser) on which to execute plugin.
+
+##### Change below tags and configurations according to your projects. You can provide as many configurations as you want to execute tests on different given configurations.
+
+```
+<configurations>
+    <configuration>
+      <browser>Chrome</browser>
+      <bSbrowser>Edge</bSbrowser>
+      <BSbrowserversion>96</BSbrowserversion>
+      <BSos>WINDOWS</BSos>
+      <BSosversion>10</BSosversion>
+      <seleniumserver>local</seleniumserver>
+      <seleniumserverhost>host_address</seleniumserverhost>
+    </configuration>
+
+    <configuration>
+      <browser>BrowserStack</browser>
+      <bSbrowser>Edge</bSbrowser>
+      <BSbrowserversion>96</BSbrowserversion>
+      <BSos>WINDOWS</BSos>
+      <BSosversion>10</BSosversion>
+      <seleniumserver>remote</seleniumserver>
+      <seleniumserverhost>host_address</seleniumserverhost>
+    </configuration>
+ </configurations>
+  ```
