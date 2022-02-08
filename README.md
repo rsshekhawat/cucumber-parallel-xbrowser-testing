@@ -124,11 +124,12 @@ import org.testng.annotations.BeforeClass;
 import java.io.File;
 import java.io.IOException;
 
+// Don't change strings 'TEST_RUNNER_CLASS_NAME', 'FEATURE_FILES_PATH', 'FEATURE_FILES_TAGS'
 
 @CucumberOptions(
-        features = {"FEATURE_FILES_PATH"},
+        features = {"FEATURE_FILES_PATH"}, // FEATURE_FILES_PATH will pe passed as argument in plugin
         monochrome = true,
-        tags = "FEATURE_FILES_TAGS",
+        tags = "FEATURE_FILES_TAGS", // FEATURE_FILES_TAGS will be passed as argument in plugin
         glue="", // change this as per your project
         plugin = {"json:target/parallel-xbrowser/cucumber-report/TEST_RUNNER_CLASS_NAME.json"}
 )
@@ -137,7 +138,7 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
     @BeforeClass
     public void init() throws IOException {
         
-        Change below given code section as per your needs. This is just to create a 'data' directory for storing data.properties files
+        // Change below given code section as per your needs. This is just to create a 'data' directory for storing data.properties files
 
         //----------------------------------------------------
         String directoryPath = System.getProperty("user.dir")+File.separator+"target"+File.separator+"parallel-xbrowser"+File.separator+"data";
