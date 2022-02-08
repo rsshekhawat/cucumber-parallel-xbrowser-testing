@@ -187,3 +187,9 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
     }
 }
  ```
+ 
+ ### STEP 4 : Execute plugin with mvn command
+ 
+ ```
+ mvn clean verify
+ ```
