@@ -29,10 +29,18 @@
           <goal>xbrowser</goal>
         </goals>
         <configuration>
-          <templateRunnerPath>path_to_test_runner_template</templateRunnerPath>
-          <featureFilesPath>path_to_feature_files_directory</featureFilesPath>
-          <configurationFilePath>path_to_config_file</configurationFilePath>
-          <includedTags>@Smoke</includedTags>
+	  // This is mandatory tag. Give the path of your 'xbrowser.template' file
+          <templateRunnerPath>path_to_test_runner_template</templateRunnerPath> 
+	  
+	  // This is mandatory tag. Give the path of your feature files directory
+          <featureFilesPath>path_to_feature_files_directory</featureFilesPath>  
+	  
+	  // This is mandatory tag. Give the path of your config.xml file
+          <configurationFilePath>path_to_config_file</configurationFilePath>    
+	  
+	  // This is mandatory tag. Leave it empty if you are not using tags like <includedTags></includedTags>
+	  // You can also use combinations of tags as well, as per the cucumber tags rules.
+          <includedTags>@Smoke</includedTags> 	
         </configuration>
       </execution>
     </executions>
@@ -139,8 +147,11 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
     public void init() throws IOException {
         
         // Change below given code section as per your needs. This is just to create a 'data' directory for storing data.properties files
+        // You can also remove below code section if you don't want it. This is not at all necessary. 
+        // This is just to show how you can change test runner template according to your needs.
 
-        //----------------------------------------------------
+        //----------------------------------------------------------------------------------------------------------
+	
         String directoryPath = System.getProperty("user.dir")+File.separator+"target"+File.separator+"parallel-xbrowser"+File.separator+"data";
         String filePath = directoryPath + File.separator + "TEST_RUNNER_CLASS_NAME.properties";
         File dir = new File(directoryPath);
@@ -149,21 +160,22 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
         boolean flag = file.createNewFile();
         Reporter.log("New file created : "+flag);
         PropFileHandler.filePath = filePath; 
+	
         // PropFileHandler is the class for writing temprary data into data.properties. Change this as per your project.
-        //-----------------------------------------------------
+        //----------------------------------------------------------------------------------------------------------
         
         setSystemVariables();
     }
 
     public void setSystemVariables(){
 
-		  // Set few system variables as per your project to run the tests on browserstack or VM
-		  // You can set system variables as per your needs. 
-		  // Following is a way to set one system property :  
-		  // System.setProperty("property","propertyValue") 
-		  // Note : This "property" should be same as one of the property tags in 'configuration' tag in config.xml file
-		  // Note : propertyValue = "property" + "Value"  // "Value" is just a string
-		  // see below examples for reference
+	  // Set few system variables as per your project to run the tests on browserstack or VM
+	  // You can set system variables as per your needs. 
+	  // Following is a way to set one system property :  
+	  // System.setProperty("property","propertyValue") 
+	  // Note : This "property" should be same as one of the property tags in 'configuration' tag in config.xml file
+	  // Note : propertyValue = "property" + "Value"  // "Value" is just a string
+	  // see below examples for reference
 		  
          System.setProperty("browser","browserValue"); // browser
          System.setProperty("BSbrowser","BSbrowserValue"); //browserstack browser
@@ -177,7 +189,8 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
     @AfterClass
     public void closeSession(){
 	
-		//Write your code here to close the driver as per your project
+	// Write your code here to close the driver as per your project
+	
         Reporter.log("Closing browser",true);
         try {
             driver.quit();
