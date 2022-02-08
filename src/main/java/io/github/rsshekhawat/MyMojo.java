@@ -16,7 +16,6 @@ package io.github.rsshekhawat;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -56,8 +55,13 @@ public class MyMojo extends AbstractMojo
     @Parameter( defaultValue = "${mojoExecution}", readonly = true )
     private MojoExecution mojo;
 
-    String runnersDirectoryPath = System.getProperty("user.dir")+ File.separator+"target"+File.separator+"parallel-xbrowser"+File.separator+"runners";
+    String baseDirectory = System.getProperty("user.dir")+ File.separator+"target"+File.separator+"parallel-xbrowser";
+    String runnersDirectoryPath = baseDirectory+File.separator+"runners";
+    String propertiesDirectoryPath = baseDirectory+File.separator+"properties";
+    String dataDirectoryPath = baseDirectory+File.separator+"data";
     Map<Integer, Map<String, String>> configMap;
+    String fileNamePattern = "IT_Cucumber_Parallel_Cross_Browser_";
+    int totalFiles = 0;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -69,35 +73,23 @@ public class MyMojo extends AbstractMojo
         getLog().info("------------------------------------------------------------------------");
         try {
             configMap = convertXMLToJSONAndReturnMap();
-            prepareTemplateRunnerFile();
             createTestRunners();
+            createPropertiesFilesForEachTestRunner();
             addSpecificsToTestRunners();
             printConfigurationsLogs();
+            createDataPropertiesFile();
         } catch (Exception exc) {
             getLog().info("Exception : "+exc.getMessage());
         }
     }
 
-    public void prepareTemplateRunnerFile() throws IOException {
-
-        Map<String, String> map = new HashMap<>();
-        map.put("FEATURE_FILES_PATH", featureFilesPath);
-        map.put("FEATURE_FILES_TAGS",includedTags);
-
-        String filePath = templateRunnerPath;
-        File file = new File(filePath);
-        replaceTerms(file, map);
-    }
-
     public void createTestRunners() throws IOException {
 
-        int totalFiles = configMap.size();
         String content = new String(Files.readAllBytes(Paths.get(templateRunnerPath)));
-        String fileName = "IT_Cucumber_Parallel_Cross_Browser_Test_Runner_";
         File dir = new File(runnersDirectoryPath);
 
         for(int i=0;i<totalFiles;i++) {
-            String filePath = runnersDirectoryPath + File.separator + fileName+i+".java";
+            String filePath = runnersDirectoryPath + File.separator + fileNamePattern +i+".java";
             if (!dir.exists()) dir.mkdirs();
             File file = new File(filePath);
             boolean flag = file.createNewFile();
@@ -108,21 +100,31 @@ public class MyMojo extends AbstractMojo
         getLog().info("Total Test Runners Created : "+totalFiles);
     }
 
+    public void createDataPropertiesFile() throws IOException {
+
+        File dir = new File(dataDirectoryPath);
+
+        for(int i=0;i<totalFiles;i++) {
+            String filePath = dataDirectoryPath + File.separator + fileNamePattern +i+".properties";
+            if (!dir.exists()) dir.mkdirs();
+            File file = new File(filePath);
+            file.createNewFile();
+        }
+    }
+
     public void addSpecificsToTestRunners() throws IOException {
 
         File folder = new File(runnersDirectoryPath);
         File[] listOfFiles = folder.listFiles();
         assert listOfFiles != null;
 
-        int index = 0;
-
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                Map<String, String> m = configMap.get(index);
-                m.put("TEST_RUNNER_CLASS_NAME",file.getName().split("\\.")[0]);
-                replaceTerms(file, m);
-                m.remove("TEST_RUNNER_CLASS_NAME");
-                index+=1;
+                Map<String, String> map = new HashMap<>();
+                map.put("TEST_RUNNER_CLASS_NAME",file.getName().split("\\.")[0]);
+                map.put("FEATURE_FILES_PATH", featureFilesPath);
+                map.put("FEATURE_FILES_TAGS",includedTags);
+                replaceTerms(file, map);
             }
         }
     }
@@ -152,12 +154,33 @@ public class MyMojo extends AbstractMojo
         }
     }
 
+    public void createPropertiesFilesForEachTestRunner() throws IOException {
+
+        Map<Integer, Map<String, String>> map = configMap;
+        File dir = new File(propertiesDirectoryPath);
+
+        for(int i=0;i<totalFiles;i++) {
+            String filePath = propertiesDirectoryPath + File.separator + fileNamePattern +i+ ".properties";
+            if (!dir.exists()) dir.mkdirs();
+
+            File file = new File(filePath);
+            BufferedWriter bf = new BufferedWriter(new FileWriter(file));
+
+            for (Map.Entry<String, String> entry : map.get(i).entrySet()) {
+                bf.write(entry.getKey() + ":" + entry.getValue());
+                bf.newLine();
+            }
+            bf.flush();
+        }
+    }
+
     public Map<Integer, Map<String, String>> convertXMLToJSONAndReturnMap() throws IOException {
 
         Map<Integer, Map<String, String>> map = new HashMap<>();
         String content = new String(Files.readAllBytes(Paths.get(configurationFilePath)));
         JSONObject obj = new JSONObject(XML.toJSONObject(content).toString()).getJSONObject("configurations");
         JSONArray arr = obj.getJSONArray("configuration");
+        totalFiles = arr.length();
         for(int i=0;i<arr.length();i++){
             map.put(i, jsonToMap(arr.get(i).toString()));
         }
@@ -173,7 +196,7 @@ public class MyMojo extends AbstractMojo
         while( keys.hasNext() ){
             String key = (String)keys.next();
             String value = jObject.get(key).toString();
-            map.put(key+"Value", value);
+            map.put(key, value);
         }
         return map;
     }
@@ -192,7 +215,7 @@ public class MyMojo extends AbstractMojo
         for (Map.Entry<Integer, Map<String, String>> mapElement : configMap.entrySet()) {
             Map<String, String> map = mapElement.getValue();
             for (Map.Entry<String, String> mapEle : map.entrySet()) {
-                getLog().info(StringUtils.substringBefore(mapEle.getKey(),"Value") + " : " + mapEle.getValue());
+                getLog().info(mapEle.getKey() + " : " + mapEle.getValue());
             }
             getLog().info("------------------------------------------------------------------------");
         }

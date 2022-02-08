@@ -7,7 +7,7 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
