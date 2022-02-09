@@ -138,7 +138,7 @@ import io.github.rsshekhawat.MyMojo;
         features = {"FEATURE_FILES_PATH"},
         monochrome = true,
         tags = "FEATURE_FILES_TAGS",
-        glue="com.cengage.nglsync.tests",
+        glue="",
         plugin = {"json:target/parallel-xbrowser/cucumber-report/TEST_RUNNER_CLASS_NAME.json"}
 )
 public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
