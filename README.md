@@ -1,4 +1,5 @@
-# Plugin : cucumber-parallel-xbrowser-testing
+# Plugin : cucumber-parallel-xbrowser-testing 
+## Latest Version : 0.0.3
 
 ## Steps to execute this plugin : 
 
@@ -10,7 +11,7 @@
 <dependency>
     <groupId>io.github.rsshekhawat</groupId>
     <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-    <version>0.0.1</version>
+    <version>latest_version</version> 
 </dependency>
 ```
 
@@ -20,7 +21,7 @@
 <plugin>
     <groupId>io.github.rsshekhawat</groupId>
     <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-    <version>0.0.1</version>
+    <version>latest_version</version>
     <executions>
       <execution>
         <id>parallel</id>
