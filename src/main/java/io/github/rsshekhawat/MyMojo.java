@@ -32,6 +32,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
+
 import org.json.XML;
 
 @Mojo(name="xbrowser", defaultPhase = LifecyclePhase.INITIALIZE)
@@ -158,10 +160,10 @@ public class MyMojo extends AbstractMojo
 
         Map<Integer, Map<String, String>> map = configMap;
         File dir = new File(propertiesDirectoryPath);
+        if (!dir.exists()) dir.mkdirs();
 
         for(int i=0;i<totalFiles;i++) {
             String filePath = propertiesDirectoryPath + File.separator + fileNamePattern +i+ ".properties";
-            if (!dir.exists()) dir.mkdirs();
 
             File file = new File(filePath);
             BufferedWriter bf = new BufferedWriter(new FileWriter(file));
@@ -199,6 +201,22 @@ public class MyMojo extends AbstractMojo
             map.put(key, value);
         }
         return map;
+    }
+
+    public void setSystemVariables(String fileName){
+
+        try {
+            File file = new File(propertiesDirectoryPath+File.separator+fileName);
+            Properties prop = new Properties();
+            InputStream is = new FileInputStream(file);
+            prop.load(is);
+            for (Map.Entry e : prop.entrySet()){
+                System.setProperty(e.getKey().toString(),e.getValue().toString());
+            }
+            is.close();
+        }catch (Exception exc){
+            getLog().info(exc.getMessage());
+        }
     }
 
     public void printConfigurationsLogs(){
