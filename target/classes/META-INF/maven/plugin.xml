@@ -7,7 +7,7 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
@@ -44,7 +44,7 @@
         <parameter>
           <name>includedTags</name>
           <type>java.lang.String</type>
-          <required>true</required>
+          <required>false</required>
           <editable>true</editable>
           <description></description>
         </parameter>

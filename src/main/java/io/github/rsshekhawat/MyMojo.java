@@ -16,6 +16,7 @@ package io.github.rsshekhawat;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -51,7 +52,7 @@ public class MyMojo extends AbstractMojo
     @Parameter(property = "configurationFilePath", required = true)
     private String configurationFilePath;
 
-    @Parameter(property = "includedTags", required = true)
+    @Parameter(property = "includedTags")
     private String includedTags;
 
     @Parameter( defaultValue = "${mojoExecution}", readonly = true )
@@ -88,6 +89,8 @@ public class MyMojo extends AbstractMojo
     public void createTestRunners() throws IOException {
 
         String content = new String(Files.readAllBytes(Paths.get(templateRunnerPath)));
+        content = ripOffPackageNameFromJavaFile(content);
+
         File dir = new File(runnersDirectoryPath);
 
         for(int i=0;i<totalFiles;i++) {
@@ -102,6 +105,19 @@ public class MyMojo extends AbstractMojo
         getLog().info("Total Test Runners Created : "+totalFiles);
     }
 
+    public String ripOffPackageNameFromJavaFile(String content) throws IOException {
+
+        File file = new File(templateRunnerPath);
+        String filePath = file.getCanonicalPath();
+        filePath = filePath.replaceAll("\\\\",".");
+        filePath = StringUtils.substringBetween(filePath,"src.test.java.","."+file.getName());
+
+        if(content.contains("package") && content.contains(filePath)) {
+            content = content.replaceAll("package.*"+filePath+".*;","");
+        }
+        return content;
+    }
+
     public void createDataPropertiesFile() throws IOException {
 
         File dir = new File(dataDirectoryPath);
@@ -114,7 +130,7 @@ public class MyMojo extends AbstractMojo
         }
     }
 
-    public void addSpecificsToTestRunners() throws IOException {
+    public void addSpecificsToTestRunnersForTextTemplateFile() throws IOException {
 
         File folder = new File(runnersDirectoryPath);
         File[] listOfFiles = folder.listFiles();
@@ -129,6 +145,35 @@ public class MyMojo extends AbstractMojo
                 replaceTerms(file, map);
             }
         }
+    }
+
+    public void addSpecificsToTestRunnersForJavaTemplateFile() throws IOException {
+
+        File javaFile = new File(templateRunnerPath);
+        String javaFileName = javaFile.getName().split("\\.")[0];
+
+        File folder = new File(runnersDirectoryPath);
+        File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
+
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                Map<String, String> map = new HashMap<>();
+                map.put(javaFileName,file.getName().split("\\.")[0]);
+                map.put("TEST_RUNNER_CLASS_NAME",file.getName().split("\\.")[0]);
+                map.put("FEATURE_FILES_PATH", featureFilesPath);
+                map.put("FEATURE_FILES_TAGS",includedTags);
+                replaceTerms(file, map);
+            }
+        }
+    }
+
+    public void addSpecificsToTestRunners() throws IOException {
+
+        if(templateRunnerPath.contains(".java"))
+            addSpecificsToTestRunnersForJavaTemplateFile();
+        else
+            addSpecificsToTestRunnersForTextTemplateFile();
     }
 
     public void replaceTerms(File file, Map<String, String> map) throws IOException {
