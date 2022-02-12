@@ -1,5 +1,5 @@
 # Plugin : cucumber-parallel-xbrowser-testing 
-## Latest Version : 0.0.4
+## Latest Version : 0.0.5
 
 ## Steps to execute this plugin : 
 
@@ -67,6 +67,16 @@
             <source>${project.build.directory}/parallel-xbrowser/runners/</source>
           </sources>
         </configuration>
+      </execution>
+      <execution>
+	  <id>reporting</id>
+	  <phase>post-integration-test</phase>
+	  <goals>
+	    <goal>xbrowser-reports</goal>
+	  </goals>
+	  <configuration>
+	    <Qualifiers>browser</Qualifiers>
+	  </configuration>
       </execution>
     </executions>
 </plugin>
