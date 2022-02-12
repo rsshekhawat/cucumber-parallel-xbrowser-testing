@@ -34,11 +34,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-
 import org.json.XML;
 
 @Mojo(name="xbrowser", defaultPhase = LifecyclePhase.INITIALIZE)
-public class MyMojo extends AbstractMojo
+public class CreateTestRunners extends AbstractMojo
 {
     @Parameter(property = "project", readonly = true)
     private MavenProject mavenProject;

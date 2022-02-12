@@ -7,7 +7,7 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
@@ -21,7 +21,7 @@
       <requiresOnline>false</requiresOnline>
       <inheritedByDefault>true</inheritedByDefault>
       <phase>initialize</phase>
-      <implementation>io.github.rsshekhawat.MyMojo</implementation>
+      <implementation>io.github.rsshekhawat.CreateTestRunners</implementation>
       <language>java</language>
       <instantiationStrategy>per-lookup</instantiationStrategy>
       <executionStrategy>once-per-session</executionStrategy>
@@ -79,8 +79,55 @@
         <templateRunnerPath implementation="java.lang.String">${templateRunnerPath}</templateRunnerPath>
       </configuration>
     </mojo>
+    <mojo>
+      <goal>xbrowser-reports</goal>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>post-integration-test</phase>
+      <implementation>io.github.rsshekhawat.CustomCucumberReports</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>Qualifiers</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>mojo</name>
+          <type>org.apache.maven.plugin.MojoExecution</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <Qualifiers implementation="java.lang.String">${Qualifiers}</Qualifiers>
+        <mojo implementation="org.apache.maven.plugin.MojoExecution" default-value="${mojoExecution}"/>
+      </configuration>
+    </mojo>
   </mojos>
   <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <type>jar</type>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <type>jar</type>
+      <version>1.7.32</version>
+    </dependency>
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
@@ -92,6 +139,132 @@
       <artifactId>commons-lang3</artifactId>
       <type>jar</type>
       <version>3.12.0</version>
+    </dependency>
+    <dependency>
+      <groupId>net.masterthought</groupId>
+      <artifactId>cucumber-reporting</artifactId>
+      <type>jar</type>
+      <version>5.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <type>jar</type>
+      <version>2.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <type>jar</type>
+      <version>2.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <type>jar</type>
+      <version>2.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <type>jar</type>
+      <version>2.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity-engine-core</artifactId>
+      <type>jar</type>
+      <version>2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <type>jar</type>
+      <version>3.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <type>jar</type>
+      <version>2.10.10</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <type>jar</type>
+      <version>2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <type>jar</type>
+      <version>1.14.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <type>jar</type>
+      <version>30.1.1-jre</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>failureaccess</artifactId>
+      <type>jar</type>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>listenablefuture</artifactId>
+      <type>jar</type>
+      <version>9999.0-empty-to-avoid-conflict-with-guava</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <type>jar</type>
+      <version>3.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>checker-qual</artifactId>
+      <type>jar</type>
+      <version>3.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.errorprone</groupId>
+      <artifactId>error_prone_annotations</artifactId>
+      <type>jar</type>
+      <version>2.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.j2objc</groupId>
+      <artifactId>j2objc-annotations</artifactId>
+      <type>jar</type>
+      <version>1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+      <artifactId>owasp-java-html-sanitizer</artifactId>
+      <type>jar</type>
+      <version>20211018.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <type>jar</type>
+      <version>1.10</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <type>jar</type>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <type>jar</type>
+      <version>1.1.1</version>
     </dependency>
   </dependencies>
 </plugin>

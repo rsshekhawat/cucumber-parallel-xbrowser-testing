@@ -133,7 +133,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import java.io.File;
 import java.io.IOException;
-import io.github.rsshekhawat.MyMojo;
+import io.github.rsshekhawat.CreateTestRunners;
 
 @CucumberOptions(
         features = {"FEATURE_FILES_PATH"},
@@ -155,7 +155,7 @@ public class TEST_RUNNER_CLASS_NAME extends AbstractTestNGCucumberTests {
 	// ------------------------------------------------------------------------------------------------------------------------------------
 	
 	// below function will set system properties to run this test runner on given configuration in config.xml
-        new MyMojo().setSystemVariables("TEST_RUNNER_CLASS_NAME.properties");
+        new CreateTestRunners().setSystemVariables("TEST_RUNNER_CLASS_NAME.properties");
     }
 
     @AfterClass

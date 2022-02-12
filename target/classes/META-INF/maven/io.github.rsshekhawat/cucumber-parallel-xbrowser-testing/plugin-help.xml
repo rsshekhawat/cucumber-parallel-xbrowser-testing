@@ -7,7 +7,7 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <mojos>
     <mojo>
@@ -19,7 +19,7 @@
       <requiresOnline>false</requiresOnline>
       <inheritedByDefault>true</inheritedByDefault>
       <phase>initialize</phase>
-      <implementation>io.github.rsshekhawat.MyMojo</implementation>
+      <implementation>io.github.rsshekhawat.CreateTestRunners</implementation>
       <language>java</language>
       <instantiationStrategy>per-lookup</instantiationStrategy>
       <executionStrategy>once-per-session</executionStrategy>
@@ -59,6 +59,33 @@
         <featureFilesPath implementation="java.lang.String">${featureFilesPath}</featureFilesPath>
         <includedTags implementation="java.lang.String">${includedTags}</includedTags>
         <templateRunnerPath implementation="java.lang.String">${templateRunnerPath}</templateRunnerPath>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>xbrowser-reports</goal>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>post-integration-test</phase>
+      <implementation>io.github.rsshekhawat.CustomCucumberReports</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>Qualifiers</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <Qualifiers implementation="java.lang.String">${Qualifiers}</Qualifiers>
       </configuration>
     </mojo>
   </mojos>
