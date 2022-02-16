@@ -1,5 +1,5 @@
 # Plugin : cucumber-parallel-xbrowser-testing 
-## Latest Version : 0.0.5
+## Latest Version : 0.0.6
 
 ## Steps to execute this plugin : 
 
