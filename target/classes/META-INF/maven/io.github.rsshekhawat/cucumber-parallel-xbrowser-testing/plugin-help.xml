@@ -7,7 +7,7 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <mojos>
     <mojo>
@@ -18,7 +18,7 @@
       <aggregator>false</aggregator>
       <requiresOnline>false</requiresOnline>
       <inheritedByDefault>true</inheritedByDefault>
-      <phase>initialize</phase>
+      <phase>integration-test</phase>
       <implementation>io.github.rsshekhawat.CreateTestRunners</implementation>
       <language>java</language>
       <instantiationStrategy>per-lookup</instantiationStrategy>

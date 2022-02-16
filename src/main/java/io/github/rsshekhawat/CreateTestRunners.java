@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Properties;
 import org.json.XML;
 
-@Mojo(name="xbrowser", defaultPhase = LifecyclePhase.INITIALIZE)
+@Mojo(name="xbrowser", defaultPhase = LifecyclePhase.INTEGRATION_TEST)
 public class CreateTestRunners extends AbstractMojo
 {
     @Parameter(property = "project", readonly = true)
@@ -91,10 +91,10 @@ public class CreateTestRunners extends AbstractMojo
         content = ripOffPackageNameFromJavaFile(content);
 
         File dir = new File(runnersDirectoryPath);
+        if (!dir.exists()) dir.mkdirs();
 
         for(int i=0;i<totalFiles;i++) {
             String filePath = runnersDirectoryPath + File.separator + fileNamePattern +i+".java";
-            if (!dir.exists()) dir.mkdirs();
             File file = new File(filePath);
             boolean flag = file.createNewFile();
             FileWriter myWriter = new FileWriter(filePath);
@@ -120,10 +120,10 @@ public class CreateTestRunners extends AbstractMojo
     public void createDataPropertiesFile() throws IOException {
 
         File dir = new File(dataDirectoryPath);
+        if (!dir.exists()) dir.mkdirs();
 
         for(int i=0;i<totalFiles;i++) {
             String filePath = dataDirectoryPath + File.separator + fileNamePattern +i+".properties";
-            if (!dir.exists()) dir.mkdirs();
             File file = new File(filePath);
             file.createNewFile();
         }
@@ -225,10 +225,15 @@ public class CreateTestRunners extends AbstractMojo
         Map<Integer, Map<String, String>> map = new HashMap<>();
         String content = new String(Files.readAllBytes(Paths.get(configurationFilePath)));
         JSONObject obj = new JSONObject(XML.toJSONObject(content).toString()).getJSONObject("configurations");
-        JSONArray arr = obj.getJSONArray("configuration");
-        totalFiles = arr.length();
-        for(int i=0;i<arr.length();i++){
-            map.put(i, jsonToMap(arr.get(i).toString()));
+        try {
+            JSONArray arr = obj.getJSONArray("configuration");
+            totalFiles = arr.length();
+            for (int i = 0; i < arr.length(); i++) {
+                map.put(i, jsonToMap(arr.get(i).toString()));
+            }
+        }catch(JSONException exc){
+            map.put(0, jsonToMap(obj.getJSONObject("configuration").toString()));
+            totalFiles = 1;
         }
         return map;
     }
