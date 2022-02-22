@@ -7,11 +7,54 @@
   <description>xbrowser parallel testing</description>
   <groupId>io.github.rsshekhawat</groupId>
   <artifactId>cucumber-parallel-xbrowser-testing</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
   <goalPrefix>cucumber-parallel-xbrowser-testing</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
   <mojos>
+    <mojo>
+      <goal>metadata</goal>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>post-integration-test</phase>
+      <implementation>io.github.rsshekhawat.MultipleCucumberHTMLReporter</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>metadataFilePath</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>metadataParameter</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>mojo</name>
+          <type>org.apache.maven.plugin.MojoExecution</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <metadataFilePath implementation="java.lang.String">${metadataFilePath}</metadataFilePath>
+        <metadataParameter implementation="java.lang.String">${metadataParameter}</metadataParameter>
+        <mojo implementation="org.apache.maven.plugin.MojoExecution" default-value="${mojoExecution}"/>
+      </configuration>
+    </mojo>
     <mojo>
       <goal>xbrowser</goal>
       <requiresDirectInvocation>false</requiresDirectInvocation>
@@ -427,6 +470,12 @@
       <artifactId>commons-logging</artifactId>
       <type>jar</type>
       <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <type>jar</type>
+      <version>1.9</version>
     </dependency>
   </dependencies>
 </plugin>

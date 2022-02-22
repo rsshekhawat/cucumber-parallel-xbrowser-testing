@@ -61,7 +61,7 @@ public class CreateTestRunners extends AbstractMojo
     String runnersDirectoryPath = baseDirectory+File.separator+"runners";
     String propertiesDirectoryPath = baseDirectory+File.separator+"properties";
     String dataDirectoryPath = baseDirectory+File.separator+"data";
-    Map<Integer, Map<String, String>> configMap;
+    public static Map<Integer, Map<String, String>> configMap;
     String fileNamePattern = "IT_Cucumber_Parallel_Cross_Browser_";
     int totalFiles = 0;
 
@@ -225,6 +225,7 @@ public class CreateTestRunners extends AbstractMojo
         Map<Integer, Map<String, String>> map = new HashMap<>();
         String content = new String(Files.readAllBytes(Paths.get(configurationFilePath)));
         JSONObject obj = new JSONObject(XML.toJSONObject(content).toString()).getJSONObject("configurations");
+
         try {
             JSONArray arr = obj.getJSONArray("configuration");
             totalFiles = arr.length();

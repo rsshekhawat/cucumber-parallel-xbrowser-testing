@@ -1,4 +1,7 @@
 # IntelliJ Files
 .idea
 
+#Target Folder
+target/
+
 

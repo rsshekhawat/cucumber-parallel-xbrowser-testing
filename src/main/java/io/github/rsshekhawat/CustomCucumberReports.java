@@ -1,5 +1,6 @@
 package io.github.rsshekhawat;
 
+import org.apache.commons.text.StringSubstitutor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoExecution;
@@ -100,9 +101,8 @@ public class CustomCucumberReports extends AbstractMojo {
         return map;
     }
 
-    public String getQualifierValue(String fileName, String list){
+    public String getQualifierValue(String fileName, String str){
 
-        List<String> res = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         try {
             File file = new File(propertiesDirectoryPath+File.separator+fileName);
@@ -114,17 +114,9 @@ public class CustomCucumberReports extends AbstractMojo {
                 map.put(key, value);
             }
             is.close();
-            String[] arr = list.split("\\s+");
-
-            for(String item: arr){
-                if(map.get(item)==null)
-                    continue;
-                res.add(map.get(item));
-            }
-
         }catch (Exception exc){
             getLog().info("Exception : "+exc.getMessage());
         }
-        return String.join(", ", res);
+        return new StringSubstitutor(map,"{","}").replace(str);
     }
 }
